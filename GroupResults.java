@@ -33,7 +33,7 @@ public class GroupResults extends JPanel implements ActionListener, OpenFilesHan
         export.addActionListener(this);
         export.setAlignmentX(Component.RIGHT_ALIGNMENT);
         add(export);
-        Desktop.getDesktop().setOpenFileHandler(this);
+        //Desktop.getDesktop().setOpenFileHandler(this);
 
     }
 
