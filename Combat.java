@@ -18,7 +18,7 @@ public class Combat {
         if (move.type.equals(attacker.base.types[0]) || move.type.equals(attacker.base.types[1])) {
             damage *= 1.5D;
         }
-        damage *= context.generateMultiplier();
+        damage *= context.generateMultiplier(attacker,move,attacked);
         damage *= TypeAdvantages.generateMultiplier(move, attacked.base);
         int[] damageRange = {(int) (85.0D * damage / 100.0D), (int) damage};
         return damageRange;
@@ -35,7 +35,11 @@ public class Combat {
     }
 
     public static int maxNumberOfHitsToKill(int[] damageRange, int pokemonHealth) {
-        return (int) Math.ceil(pokemonHealth / damageRange[0]);
+        if(damageRange[0]!=0) {
+            return (int) Math.ceil(pokemonHealth / damageRange[0]);
+        } else {
+            return 0;
+        }
     }
 
     public static void main(String[] args) {

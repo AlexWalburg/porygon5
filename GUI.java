@@ -18,6 +18,8 @@ public class GUI
     ArrayList<BasePokemon> basePokemons;
     ArrayList<Move> moves;
     Context context;
+    JComboBox<String> weathers = new JComboBox<String>(new String[]{"--No Weather--","Rain","Heavy Rain", "Sunshine", "Harsh Sunshine", "Hail",
+            "Sandstorm", "Strong Winds", "Fog"});
 
     public GUI() throws IOException, ClassNotFoundException {
         setLayout(new GridLayout(1, 4));
@@ -32,6 +34,7 @@ public class GUI
         makeResults = new JButton("Do All the calculations");
         makeResults.addActionListener(this);
 
+        contextMaker.add(weathers);
         contextMaker.add(makeResults);
 
         add(yourPokemon);
@@ -52,6 +55,7 @@ public class GUI
 
     public void actionPerformed(ActionEvent actionEvent) {
         if (actionEvent.getSource().equals(makeResults)) {
+            context.weather=(String)weathers.getSelectedItem();
             results.clearResults();
             ArrayList<BasePokemon> attackeds = theirPokemons.getChosenPokemon();
             Pokemon attacker = yourPokemon.makePokemon();

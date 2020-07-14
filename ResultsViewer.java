@@ -25,7 +25,11 @@ public class ResultsViewer extends JPanel implements ActionListener {
             nameOfButton.append(j);
             nameOfButton.append('/');
         }
-        nameOfButton.append(" " + max + "hit KO");
+        if(max!=0){
+            nameOfButton.append(" " + max + "hit KO");
+        } else {
+            nameOfButton.append(" infinity hit KO");
+        }
 
         this.simple = new JButton(nameOfButton.toString());
         StringBuilder fullText = new StringBuilder();
