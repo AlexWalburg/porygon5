@@ -1,21 +1,40 @@
 
 
 import javax.swing.*;
+import java.awt.*;
+import java.awt.desktop.OpenFilesEvent;
+import java.awt.desktop.OpenFilesHandler;
+import java.awt.desktop.OpenURIEvent;
+import java.awt.desktop.OpenURIHandler;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
 
-public class GroupResults extends JPanel {
+public class GroupResults extends JPanel implements ActionListener, OpenFilesHandler {
     JPanel panel = new JPanel();
+    JButton export = new JButton("Export");
+    GUI above;
 
-    public GroupResults() {
-        BoxLayout layout = new BoxLayout(this.panel, 1);
+    public GroupResults(GUI above) {
+        this.above = above;
+        BoxLayout layout = new BoxLayout(this.panel, BoxLayout.PAGE_AXIS);
         this.panel.setLayout(layout);
-        JScrollPane scrollPane = new JScrollPane(this.panel, 20, 31);
-        setLayout(new BoxLayout(this, 1));
+        JScrollPane scrollPane = new JScrollPane(this.panel, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
         add(Box.createVerticalStrut(20));
-        add(new JLabel("Results"));
+        JLabel label = new JLabel("Results");
+        label.setAlignmentX(Component.LEFT_ALIGNMENT);
+        add(label);
         add(scrollPane);
+        export.addActionListener(this);
+        export.setAlignmentX(Component.RIGHT_ALIGNMENT);
+        add(export);
+        Desktop.getDesktop().setOpenFileHandler(this);
+
     }
 
     public void addResultsViewer(ResultsViewer resultsViewer) {
@@ -30,7 +49,7 @@ public class GroupResults extends JPanel {
         repaint();
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, ClassNotFoundException {
         JFrame window = new JFrame("test");
         ArrayList<BasePokemon> pokemans = null;
         ArrayList<Move> moves = null;
@@ -54,16 +73,36 @@ public class GroupResults extends JPanel {
         }
 
 
-        window.add(new GroupResults());
+        window.add(new GroupResults(new GUI()));
 
         window.setDefaultCloseOperation(3);
         window.setResizable(true);
         window.setVisible(true);
     }
+
+    @Override
+    public void actionPerformed(ActionEvent actionEvent) {
+        Desktop.getDesktop().browseFileDirectory(new File("default.csv"));
+    }
+
+    @Override
+    public void openFiles(OpenFilesEvent openFilesEvent) {
+        File f = openFilesEvent.getFiles().get(0);
+        Pokemon pokemon = above.yourPokemon.makePokemon();
+        Move move = pokemon.moves[0];
+        try {
+            FileWriter fw = new FileWriter(f);
+            for(ResultsViewer c : (ResultsViewer[])panel.getComponents()){
+                if(move.category.equals("Physical")){
+                    fw.write(pokemon.base.name + "," + pokemon.stats[Pokemon.Stats.ATK] + ",");
+                    String[] toWrite = c.simple.getText().split(" ");
+                    for(String s: toWrite){
+                        fw.write(s + ",");
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
-
-
-/* Location:              /home/alex/IdeaProjects/2020july4pres/!/GroupResults.class
- * Java compiler version: 11 (55.0)
- * JD-Core Version:       1.1.3
- */

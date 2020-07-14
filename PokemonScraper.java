@@ -28,7 +28,7 @@ public class PokemonScraper {
             int pokedexNum = Integer.parseInt(((Element) stats.get(0)).text());
             String name = ((Element) stats.get(2)).text();
             int hp = Integer.parseInt(((Element) stats.get(3)).text());
-            int atk = Integer.parseInt(((Element) stats.get(4)).text());
+            int atk = Integer.parseInt(stats.get(4).text());
             int def = Integer.parseInt(((Element) stats.get(5)).text());
             int spa = Integer.parseInt(((Element) stats.get(6)).text());
             int spd = Integer.parseInt(((Element) stats.get(7)).text());

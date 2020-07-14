@@ -28,7 +28,7 @@ public class GUI
         yourPokemon = new PokemonMaker(basePokemons, moves);
         theirPokemons = new EnemyPokemonsMaker(basePokemons);
         contextMaker = new JPanel();
-        results = new GroupResults();
+        results = new GroupResults(this);
         makeResults = new JButton("Do All the calculations");
         makeResults.addActionListener(this);
 
@@ -41,7 +41,7 @@ public class GUI
     }
 
     public static void main(String[] args) throws IOException, ClassNotFoundException {
-        JFrame window = new JFrame("Why am I doing this");
+        JFrame window = new JFrame("Porygon5");
         GUI gui = new GUI();
         window.add(gui);
         window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
