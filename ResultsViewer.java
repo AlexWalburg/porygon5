@@ -62,6 +62,65 @@ public class ResultsViewer extends JPanel implements ActionListener {
         add(this.simple);
     }
 
+    public ResultsViewer(Pokemon attacker, Pokemon attacked, Move move, Context context, boolean showMove) {
+        setLayout(new BoxLayout(this, 1));
+
+        int[] damageRange = Combat.attack(attacker, attacked, move, context);
+        int max = Combat.maxNumberOfHitsToKill(damageRange, attacked.stats[Pokemon.Stats.HP]);
+        double[] percents = Combat.percentToKill(damageRange, max, attacked.stats[Pokemon.Stats.HP]);
+
+        StringBuilder nameOfButton = new StringBuilder(30);
+        if(showMove){
+            nameOfButton.append("From: ");
+            nameOfButton.append(attacker.base.name);
+            nameOfButton.append(" ");
+            nameOfButton.append(" (");
+            nameOfButton.append(move.name);
+            nameOfButton.append(") ");
+        }
+        nameOfButton.append(attacked.base.name);
+        nameOfButton.append(": ");
+        for (int j : attacked.evs) {
+            nameOfButton.append(j);
+            nameOfButton.append('/');
+        }
+        if(max!=0){
+            nameOfButton.append(" " + max + "hit KO");
+        } else {
+            nameOfButton.append(" infinity hit KO");
+        }
+
+        this.simple = new JButton(nameOfButton.toString());
+        StringBuilder fullText = new StringBuilder();
+
+        DecimalFormat df = new DecimalFormat("###.##%");
+        int hp = attacked.stats[Pokemon.Stats.HP];
+        for (int i = 0; i < max; i++) {
+            fullText.append(i + 1);
+            fullText.append(": ");
+            fullText.append(damageRange[0] * (i + 1));
+            fullText.append('-');
+            fullText.append(damageRange[1] * (i + 1));
+            fullText.append(", ");
+            fullText.append('(');
+            fullText.append(df.format(damageRange[0] / hp * (i + 1)));
+            fullText.append('-');
+            fullText.append(df.format(damageRange[1] / hp * (i + 1)));
+            fullText.append(") ");
+            fullText.append(df.format(percents[i]));
+            fullText.append('\n');
+        }
+        this.detailed = new JTextArea(fullText.toString());
+
+        this.simple.addActionListener(this::actionPerformed);
+        this.simple.setAlignmentX(0.0F);
+        this.detailed.setAlignmentX(0.0F);
+        this.detailed.setEditable(false);
+        this.detailed.setLayout(new BorderLayout());
+
+        add(this.simple);
+    }
+
     public JButton simple;
     public JTextArea detailed;
 

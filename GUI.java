@@ -14,10 +14,11 @@ public class GUI
     EnemyPokemonsMaker theirPokemons;
     GroupResults results;
     JPanel contextMaker;
-    JButton makeResults;
+    JButton makeResults, makeReverseResults;
     ArrayList<BasePokemon> basePokemons;
     ArrayList<Move> moves;
     Context context;
+    JLabel title = new JLabel("Misc controls");
     JComboBox<String> weathers = new JComboBox<String>(new String[]{"--No Weather--","Rain","Heavy Rain", "Sunshine", "Harsh Sunshine", "Hail",
             "Sandstorm", "Strong Winds", "Fog"});
 
@@ -31,11 +32,20 @@ public class GUI
         theirPokemons = new EnemyPokemonsMaker(basePokemons);
         contextMaker = new JPanel();
         results = new GroupResults(this);
-        makeResults = new JButton("Do All the calculations");
+        makeResults = new JButton("<< attacks >>");
         makeResults.addActionListener(this);
+        makeReverseResults = new JButton(">> attacks <<");
+        makeReverseResults.addActionListener(this);
 
+        weathers.setMaximumSize(new Dimension(weathers.getMaximumSize().width,weathers.getMinimumSize().height));
+
+        contextMaker.setLayout(new BoxLayout(contextMaker,BoxLayout.Y_AXIS));
+        contextMaker.add(Box.createVerticalStrut(20));
+        contextMaker.add(title);
         contextMaker.add(weathers);
         contextMaker.add(makeResults);
+        contextMaker.add(makeReverseResults);
+
 
         add(yourPokemon);
         add(contextMaker);
@@ -66,6 +76,27 @@ public class GUI
                         results.addResultsViewer(new ResultsViewer(attacker, attacked, move, context));
                     }
                 } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            revalidate();
+            repaint();
+        } else if(actionEvent.getSource().equals(makeReverseResults)){
+            context.weather=(String)weathers.getSelectedItem();
+            results.clearResults();
+            ArrayList<BasePokemon> attackers = theirPokemons.getChosenPokemon();
+            Pokemon attacked = yourPokemon.makePokemon();
+
+            for (BasePokemon attackerBase : attackers) {
+                try {
+                    moves = PokemonScraper.scrapePossibleMoves(attackerBase);
+                    for (Pokemon attacker : PokemonScraper.scrapePikalytics(attackerBase)) {
+                        Move move = Combat.getBestMove(attacker,attacked,moves,context);
+                        results.addResultsViewer(new ResultsViewer(attacker, attacked, move, context,true));
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch(ClassNotFoundException e ){
                     e.printStackTrace();
                 }
             }

@@ -101,6 +101,7 @@ public class GroupResults extends JPanel implements ActionListener{
                 fw.write(",");
                 String[] toWrite = c.simple.getText().split(" ");
                 for(String s: toWrite){
+                    if(s.equals("From:")) continue;
                     if(s.contains("/")){
                         for(String s1 : s.split("/")){
                             fw.write(s1);

@@ -63,6 +63,23 @@ public class PokemonScraper {
         fos.close();
     }
 
+    public static ArrayList<Move> scrapePossibleMoves(BasePokemon pokemon) throws IOException, ClassNotFoundException {
+        ArrayList<Move> toReturn = new ArrayList<>();
+        Document doc = Jsoup.connect("https://www.pikalytics.com/pokedex/ss/" + pokemon.name).get();
+        Elements moves = doc.getElementsByClass("pokedex-move-entry-new");
+        ArrayList<Move> realMoves = loadMoves();
+        for(Element move : moves){
+            if(move.child(0).text().equals("Other")){
+                return toReturn;
+            } else {
+                toReturn.add(
+                        findMoveinMovesList(move.child(0).text(),realMoves)
+                );
+            }
+        }
+        return toReturn;
+    }
+
     public static ArrayList<BasePokemon> loadPokemon() throws IOException, ClassNotFoundException {
         ClassLoader classLoader = ClassLoader.getSystemClassLoader();
         ObjectInputStream in = new ObjectInputStream(classLoader.getResource("pokemans.json").openStream());
@@ -219,7 +236,9 @@ public class PokemonScraper {
 
     public static void main(String[] args) {
         try {
-            scrapeMoves();
+            for(Move m : scrapePossibleMoves(findPokemoninPokemonList("Rillaboom",loadPokemon()))){
+                System.out.println(m.name);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

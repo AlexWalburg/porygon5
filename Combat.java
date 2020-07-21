@@ -42,6 +42,19 @@ public class Combat {
         }
     }
 
+    public static Move getBestMove(Pokemon attacker, Pokemon attacked, ArrayList<Move> moves, Context context){
+        int[] mostDamage = {0,0};
+        Move bestMove = null;
+        for(Move move : moves){
+            int[] damageCandidate = attack(attacker,attacked,move,context);
+            if(damageCandidate[0] > mostDamage[0]){
+                mostDamage = damageCandidate;
+                bestMove = move;
+            }
+        }
+        return bestMove;
+    }
+
     public static void main(String[] args) {
         try {
             ArrayList<BasePokemon> pokemans = PokemonScraper.loadPokemon();
