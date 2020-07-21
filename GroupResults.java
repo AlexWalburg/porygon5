@@ -12,9 +12,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 
-public class GroupResults extends JPanel implements ActionListener, OpenFilesHandler {
+public class GroupResults extends JPanel implements ActionListener{
     JPanel panel = new JPanel();
     JButton export = new JButton("Export");
+    final JFileChooser fc = new JFileChooser();
     GUI above;
 
     public GroupResults(GUI above) {
@@ -80,25 +81,38 @@ public class GroupResults extends JPanel implements ActionListener, OpenFilesHan
 
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
-        Desktop.getDesktop().browseFileDirectory(new File("default.csv"));
+        int returnVal = fc.showSaveDialog(this);
+
+        if(returnVal==JFileChooser.APPROVE_OPTION){
+            File f = fc.getSelectedFile();
+            openFile(f);
+        }
     }
 
-    @Override
-    public void openFiles(OpenFilesEvent openFilesEvent) {
-        File f = openFilesEvent.getFiles().get(0);
+    public void openFile(File f) {
         Pokemon pokemon = above.yourPokemon.makePokemon();
         Move move = pokemon.moves[0];
         try {
             FileWriter fw = new FileWriter(f);
-            for(ResultsViewer c : (ResultsViewer[])panel.getComponents()){
-                if(move.category.equals("Physical")){
-                    fw.write(pokemon.base.name + "," + pokemon.stats[Pokemon.Stats.ATK] + ",");
-                    String[] toWrite = c.simple.getText().split(" ");
-                    for(String s: toWrite){
+            for(Object o : panel.getComponents()){
+                ResultsViewer c = (ResultsViewer)o;
+                fw.write(pokemon.base.name + "," + pokemon.stats[move.category.equals("Physical") ? Pokemon.Stats.ATK : Pokemon.Stats.SPA] + ",");
+                fw.write(move.name);
+                fw.write(",");
+                String[] toWrite = c.simple.getText().split(" ");
+                for(String s: toWrite){
+                    if(s.contains("/")){
+                        for(String s1 : s.split("/")){
+                            fw.write(s1);
+                            fw.write(",");
+                        }
+                    } else {
                         fw.write(s + ",");
                     }
                 }
+                fw.write("\n");
             }
+            fw.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
