@@ -8,6 +8,7 @@ public class PokemonMaker extends JPanel {
     public JPanel evsAndIvs;
     public JPanel evs;
     public JPanel ivs;
+    public JPanel labels;
     public JComboBox<BasePokemon> basePokemonJComboBox;
     public JComboBox<Move> moveJComboBox;
     public JComboBox<String> natures;
@@ -51,6 +52,7 @@ public class PokemonMaker extends JPanel {
         this.evsAndIvs = new JPanel();
         this.evs = new JPanel();
         this.ivs = new JPanel();
+        this.labels = new JPanel();
         this.name = new JLabel("Your pokemon");
         this.name.setAlignmentX(0.5F);
         this.natures = new JComboBox<>();
@@ -81,7 +83,8 @@ public class PokemonMaker extends JPanel {
         }
 
         setLayout(new BoxLayout(this, 1));
-        this.evsAndIvs.setLayout(new GridLayout(1, 2, 10, 10));
+        this.evsAndIvs.setLayout(new GridLayout(1, 3, 10, 10));
+        this.labels.setLayout(new GridLayout(7, 1));
         this.ivs.setLayout(new GridLayout(7, 1));
         this.evs.setLayout(new GridLayout(7, 1));
         this.ivs.add(new JLabel("Ivs"));
@@ -92,6 +95,15 @@ public class PokemonMaker extends JPanel {
         for (j = 0; j < this.evBoxes.length; j++) {
             this.evs.add(this.evBoxes[j]);
         }
+        labels.add(new JLabel(""));
+        labels.add(new JLabel("HP"));
+        labels.add(new JLabel("ATK"));
+        labels.add(new JLabel("DEF"));
+        labels.add(new JLabel("SPA"));
+        labels.add(new JLabel("SPD"));
+        labels.add(new JLabel("SPE"));
+
+        this.evsAndIvs.add(labels);
         this.evsAndIvs.add(this.evs);
         this.evsAndIvs.add(this.ivs);
 
