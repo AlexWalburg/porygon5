@@ -130,6 +130,17 @@ public class PokemonScraper {
         fos.close();
     }
 
+    public static void exportListOfPokemon(File f, ArrayList<BasePokemon> pokemons) throws IOException {
+        ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(f));
+        oos.writeObject(pokemons);
+        oos.close();
+    }
+
+    public static ArrayList<BasePokemon> importListOfPokemon(File f) throws IOException, ClassNotFoundException {
+        ObjectInputStream ois = new ObjectInputStream(new FileInputStream(f));
+        return (ArrayList<BasePokemon>)ois.readObject();
+    }
+
     public static ArrayList<Pokemon> scrapePikalytics(BasePokemon pokemon) throws IOException {
         Document doc = Jsoup.connect("https://www.pikalytics.com/pokedex/ss/" + pokemon.name).get();
         Element table = doc.getElementsByClass("pokemon-stat-container").last();
