@@ -15,6 +15,7 @@ public class Pokemon {
     public String nature;
     public int level;
     public double popularity;
+    public String item, ability; //I would use an int and an enum, but it's fucking java and terrible. this also saves time on the encode
     public Move[] moves = new Move[4];
     public static Map<String, int[]> natures = Map.ofEntries(
             Map.entry("Hardy", new int[]{10, 10, 10, 10, 10, 10

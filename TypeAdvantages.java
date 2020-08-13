@@ -72,4 +72,10 @@ public class TypeAdvantages {
         }
         return multiplier;
     }
+    public static boolean isSuperEffective(BasePokemon attacked, Move move){
+        for(String s : weaknesses.getOrDefault(attacked,new String[0])){
+            if(move.type.equals(s)) return true;
+        }
+        return false;
+    }
 }
