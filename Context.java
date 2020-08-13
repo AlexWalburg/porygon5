@@ -1,16 +1,19 @@
+import java.util.ArrayList;
+
 public class Context {
     public String weather;
     public String terrain;
     public boolean doubles;
 
+
     public double generateMultiplier(Pokemon attacker, Move move, Pokemon attacked) {
         double multiplier = 1;
-
         if(doubles) multiplier*=0.75;
-        //weathers
+
         //todo when we add items, the utility umbrella should come here
         //handles STAB and power doubling
-        if(!"No Terrain".equals(terrain) && move.name.equals("Terrain Pulse")) multiplier*=4.0;
+        if(!"No Terrain".equals(terrain) && move.name.equals("Terrain Pulse"))
+            multiplier*=2.0*2.0*1.3;
         if("Electric Terrain".equals(terrain) && move.type.equals("Electric")){
             multiplier*=1.3;
             if(move.name.equals("Rising Voltage")) multiplier*=2.0;
