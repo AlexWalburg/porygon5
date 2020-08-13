@@ -1,10 +1,8 @@
-import java.util.ArrayList;
-
 public class Context {
     public String weather;
     public String terrain;
-    public boolean doubles;
-    public boolean lightScreen, reflect;
+    public boolean doubles, lightScreen, reflect, auroraVeil, crit;
+    public int numHits;
 
     public double generateMultiplier(Pokemon attacker, Move move, Pokemon attacked) {
         double multiplier = 1;
@@ -56,6 +54,15 @@ public class Context {
                 multiplier/=2.0;
             }
         }
+        if(lightScreen && move.category.equals("Special")) multiplier/=2.0;
+        if(reflect && move.category.equals("Physical")) multiplier/=2.0;
+        if(auroraVeil){
+            if(doubles) multiplier*=0.33;
+            else multiplier*=0.5;
+        }
+        if(crit) multiplier*=1.5;
+        multiplier*=numHits;
+
 
         return multiplier;
     }

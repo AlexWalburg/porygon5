@@ -1,6 +1,7 @@
 
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
@@ -71,7 +72,7 @@ public class EnemyPokemonsMaker extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent actionEvent) {
         if (actionEvent.getSource().equals(this.addButton)) {
             JComboBox<BasePokemon> thing = new JComboBox<>(this.basePokemons);
-            thing.setMaximumSize(thing.getMinimumSize());
+            thing.setMaximumSize(new Dimension(thing.getMaximumSize().width,thing.getMinimumSize().height));
             this.innerList.add(thing);
 
             revalidate();

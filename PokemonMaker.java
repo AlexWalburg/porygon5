@@ -28,8 +28,8 @@ public class PokemonMaker extends JPanel {
         }
     }
 
-    class verifyEvs extends InputVerifier {
-        private JTextField[] boxes;
+    static class verifyEvs extends InputVerifier {
+        private final JTextField[] boxes;
 
         public verifyEvs(JTextField[] boxes) {
             this.boxes = boxes;
@@ -82,7 +82,7 @@ public class PokemonMaker extends JPanel {
             this.ivBoxes[j].setInputVerifier(new verifyIvs());
         }
 
-        setLayout(new BoxLayout(this, 1));
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         this.evsAndIvs.setLayout(new GridLayout(1, 3, 10, 10));
         this.labels.setLayout(new GridLayout(7, 1));
         this.ivs.setLayout(new GridLayout(7, 1));
@@ -141,7 +141,7 @@ public class PokemonMaker extends JPanel {
         JFrame window = new JFrame("Please help me they've kidnapped me and forced me to code");
         window.add(new PokemonMaker(PokemonScraper.loadPokemon(), PokemonScraper.loadMoves()));
         window.setResizable(true);
-        window.setDefaultCloseOperation(3);
+        window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         window.setVisible(true);
     }
 }
