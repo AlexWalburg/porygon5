@@ -4,7 +4,7 @@ public class Context {
     public String weather;
     public String terrain;
     public boolean doubles;
-
+    public boolean lightScreen, reflect;
 
     public double generateMultiplier(Pokemon attacker, Move move, Pokemon attacked) {
         double multiplier = 1;

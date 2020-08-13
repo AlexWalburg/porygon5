@@ -2,8 +2,6 @@
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.desktop.OpenFilesEvent;
-import java.awt.desktop.OpenFilesHandler;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;

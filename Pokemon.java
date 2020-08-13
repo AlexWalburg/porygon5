@@ -1,4 +1,7 @@
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 
 public class Pokemon {
@@ -6,7 +9,16 @@ public class Pokemon {
         public static int HP = 0, ATK = 1, DEF = 2, SPA = 3, SPD = 4, SPE = 5;
     }
 
-    public static Map<String, Integer> namesToStats = Map.of("Hp", Integer.valueOf(0), "Atk", Integer.valueOf(1), "Def", Integer.valueOf(2), "Spa", Integer.valueOf(3), "Spd", Integer.valueOf(4), "Spe", Integer.valueOf(5));
+    public static HashMap<String, Integer> namesToStats = new HashMap<>();
+    static{
+        namesToStats.put("Hp",0);
+        namesToStats.put("Atk",1);
+        namesToStats.put("Def",2);
+        namesToStats.put("Spa",3);
+        namesToStats.put("Spd",4);
+        namesToStats.put("Spe",5);
+    }
+
     public BasePokemon base;
     public int[] stats = new int[]{0, 0, 0, 0, 0, 0};
     public int[] evs;
@@ -17,32 +29,35 @@ public class Pokemon {
     public double popularity;
     public String item, ability; //I would use an int and an enum, but it's fucking java and terrible. this also saves time on the encode
     public Move[] moves = new Move[4];
-    public static Map<String, int[]> natures = Map.ofEntries(
-            Map.entry("Hardy", new int[]{10, 10, 10, 10, 10, 10
-            }), Map.entry("Lonely", new int[]{10, 11, 9, 10, 10, 10
-            }), Map.entry("Brave", new int[]{10, 11, 10, 10, 10, 9
-            }), Map.entry("Adamant", new int[]{10, 11, 10, 9, 10, 10
-            }), Map.entry("Naughty", new int[]{10, 11, 10, 10, 9, 10
-            }), Map.entry("Bold", new int[]{10, 9, 11, 10, 10, 10
-            }), Map.entry("Docile", new int[]{10, 10, 10, 10, 10, 10
-            }), Map.entry("Relaxed", new int[]{10, 10, 11, 10, 10, 9
-            }), Map.entry("Impish", new int[]{10, 10, 11, 9, 10, 10
-            }), Map.entry("Lax", new int[]{10, 10, 11, 10, 10, 10}),
-            Map.entry("Timid", new int[]{10, 9, 10, 10, 10, 11
-            }), Map.entry("Hasty", new int[]{10, 10, 9, 10, 10, 11
-            }), Map.entry("Serious", new int[]{10, 10, 10, 10, 10, 10
-            }), Map.entry("Jolly", new int[]{10, 10, 10, 9, 10, 11
-            }), Map.entry("Naive", new int[]{10, 10, 10, 10, 9, 11
-            }), Map.entry("Modest", new int[]{10, 9, 10, 11, 10, 10
-            }), Map.entry("Mild", new int[]{10, 10, 9, 11, 10, 10
-            }), Map.entry("Quiet", new int[]{10, 10, 10, 11, 10, 9
-            }), Map.entry("Bashful", new int[]{10, 10, 10, 10, 10, 10
-            }), Map.entry("Rash", new int[]{10, 10, 10, 11, 9, 10}),
-            Map.entry("Calm", new int[]{10, 9, 10, 10, 11, 10
-            }), Map.entry("Gentle", new int[]{10, 10, 9, 10, 11, 10
-            }), Map.entry("Sassy", new int[]{10, 10, 10, 10, 11, 9
-            }), Map.entry("Careful", new int[]{10, 10, 10, 9, 11, 10
-            }), Map.entry("Quirky", new int[]{10, 10, 10, 10, 10, 10}));
+    public static HashMap<String, int[]> natures;
+    static {
+        natures = new HashMap<>();
+        natures.put("Hardy", new int[]{10, 10, 10, 10, 10, 10});
+        natures.put("Lonely", new int[]{10, 11, 9, 10, 10, 10});
+        natures.put("Brave", new int[]{10, 11, 10, 10, 10, 9});
+        natures.put("Adamant", new int[]{10, 11, 10, 9, 10, 10});
+        natures.put("Naughty", new int[]{10, 11, 10, 10, 9, 10});
+        natures.put("Bold", new int[]{10, 9, 11, 10, 10, 10});
+        natures.put("Docile", new int[]{10, 10, 10, 10, 10, 10});
+        natures.put("Relaxed", new int[]{10, 10, 11, 10, 10, 9});
+        natures.put("Impish", new int[]{10, 10, 11, 9, 10, 10});
+        natures.put("Lax", new int[]{10, 10, 11, 10, 10, 10});
+        natures.put("Timid", new int[]{10, 9, 10, 10, 10, 11});
+        natures.put("Hasty", new int[]{10, 10, 9, 10, 10, 11});
+        natures.put("Serious", new int[]{10, 10, 10, 10, 10, 10});
+        natures.put("Jolly", new int[]{10, 10, 10, 9, 10, 11});
+        natures.put("Naive", new int[]{10, 10, 10, 10, 9, 11});
+        natures.put("Modest", new int[]{10, 9, 10, 11, 10, 10});
+        natures.put("Mild", new int[]{10, 10, 9, 11, 10, 10});
+        natures.put("Quiet", new int[]{10, 10, 10, 11, 10, 9});
+        natures.put("Bashful", new int[]{10, 10, 10, 10, 10, 10});
+        natures.put("Rash", new int[]{10, 10, 10, 11, 9, 10});
+        natures.put("Calm", new int[]{10, 9, 10, 10, 11, 10});
+        natures.put("Gentle", new int[]{10, 10, 9, 10, 11, 10});
+        natures.put("Sassy", new int[]{10, 10, 10, 10, 11, 9});
+        natures.put("Careful", new int[]{10, 10, 10, 9, 11, 10});
+        natures.put("Quirky", new int[]{10, 10, 10, 10, 10, 10});
+    }
 
 
     String[] types = new String[2];
@@ -78,8 +93,3 @@ public class Pokemon {
     }
 }
 
-
-/* Location:              /home/alex/IdeaProjects/2020july4pres/!/Pokemon.class
- * Java compiler version: 11 (55.0)
- * JD-Core Version:       1.1.3
- */
