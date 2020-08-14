@@ -155,9 +155,17 @@ public class PokemonScraper {
             }
             double popularity = Double.parseDouble(((Element) attributes.get(7)).text().replace("%", ""));
             int[] ivs = {31, 31, 31, 31, 31, 31};
-            toReturn.add(new Pokemon(pokemon, stats, ivs, 50, nature, popularity));
+            toReturn.add(new Pokemon(pokemon, stats, ivs, 50, nature, popularity,-1));
         }
         return toReturn;
+    }
+
+    public static void scrapeItems() throws IOException{
+        Document doc = Jsoup.connect("https://bulbapedia.bulbagarden.net/wiki/Category:In-battle_effect_items").get();
+        Element e = doc.getElementsByClass("mw-category").get(1);
+        for(Element e1 : e.getElementsByTag("li")){
+            System.out.print("\"" + e1.text() + "\"" + ",");
+        }
     }
 
     public static ArrayList<Move> loadMoves() throws IOException, ClassNotFoundException {
@@ -247,9 +255,7 @@ public class PokemonScraper {
 
     public static void main(String[] args) {
         try {
-            for(Move m : scrapePossibleMoves(findPokemoninPokemonList("Rillaboom",loadPokemon()))){
-                System.out.println(m.name);
-            }
+            scrapeItems();
         } catch (Exception e) {
             e.printStackTrace();
         }

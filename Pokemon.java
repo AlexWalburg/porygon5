@@ -75,8 +75,27 @@ public class Pokemon {
         for (int i = 1; i < this.stats.length; i++)
             this.stats[i] = ((ivs[i] + 2 * species.stats[i] + evs[i] / 4) * level / 100 + 5) * this.natureEffects[i] / 10;
     }
+    public Pokemon(BasePokemon species, int[] evs, int[] ivs, int level, String nature, int dynamaxLevel) {
+        this.nature = nature;
+        this.natureEffects = natures.get(nature);
 
-    public Pokemon(BasePokemon species, int[] evs, int[] ivs, int level, String nature, double popularity) {
+
+        this.base = species;
+        this.level = level;
+        this.ivs = ivs;
+        this.evs = evs;
+        this.stats[Stats.HP] = (ivs[Stats.HP] + 2 * species.stats[Stats.HP] + evs[Stats.HP] / 4) * level / 100 + 10 + level;
+        for (int i = 1; i < this.stats.length; i++)
+            this.stats[i] = ((ivs[i] + 2 * species.stats[i] + evs[i] / 4) * level / 100 + 5) * this.natureEffects[i] / 10;
+
+        //dynamax modification
+        if(dynamaxLevel >= 0){
+            int oldHp = this.stats[Stats.HP];
+            this.stats[Stats.HP] = (int)(oldHp*1.5 + oldHp*0.05*dynamaxLevel);
+        }
+    }
+
+    public Pokemon(BasePokemon species, int[] evs, int[] ivs, int level, String nature, double popularity, int dynamaxLevel) {
         this.nature = nature;
         this.natureEffects = natures.get(nature);
 
@@ -90,6 +109,12 @@ public class Pokemon {
             this.stats[i] = ((ivs[i] + 2 * species.stats[i] + evs[i] / 4) * level / 100 + 5) * this.natureEffects[i] / 10;
         }
         this.popularity = popularity;
+
+        //dynamax modification
+        if(dynamaxLevel >= 0){
+            int oldHp = this.stats[Stats.HP];
+            this.stats[Stats.HP] = (int)(oldHp*1.5 + oldHp*0.05*dynamaxLevel);
+        }
     }
 }
 

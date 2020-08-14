@@ -15,6 +15,8 @@ public class PokemonMaker extends JPanel {
     public JLabel name;
     public JTextField[] evBoxes;
     public JTextField[] ivBoxes;
+    JSpinner dynamaxLevel = new JSpinner(new SpinnerNumberModel(-1,-1,10,1));
+    public JComboBox<String> itemJComboBox = new JComboBox<>(new String[]{"Abomasite","Absolite","Absorb Bulb","Adrenaline Orb","Aerodactylite","Aggronite","Air Balloon","Alakazite","Altarianite","Ampharosite","Amulet Coin","Assault Vest","Audinite","Banettite","Beedrillite","Berry Juice","Berserk Gene","Big Root","Binding Band","Black Sludge","Blastoisinite","Blazikenite","Blue Orb","Blunder Policy","Bright Powder","Bug Memory","Burn Drive","Cameruptite","Cell Battery","Charizardite X","Charizardite Y","Chill Drive","Choice Band","Choice Scarf","Choice Specs","Damp Rock","Dark Memory","Destiny Knot","Diancite","Douse Drive","Dragon Memory","Eject Button","Eject Pack","Electric Memory","Electric Seed","Expert Belt","Fairy Memory","Fighting Memory","Fire Memory","Flame Orb","Float Stone","Flying Memory","Focus Band","Focus Sash","Full Incense","Galladite","Garchompite","Gardevoirite","Gengarite","Ghost Memory","Glalitite","Grass Memory","Grassy Seed","Grip Claw","Ground Memory","Gyaradosite","Heat Rock","Heavy-Duty Boots","Heracronite","Houndoominite","Ice Memory","Icy Rock","Iron Ball","Kangaskhanite","King's Rock","Lagging Tail","Latiasite","Latiosite","Lax Incense","Leftovers","Life Orb","Light Clay","Lopunnite","Lucarionite","Luck Incense","Luminous Moss","Macho Brace","Manectite","Mawilite","Medichamite","Mental Herb","Metagrossite","Metronome (item)","Mewtwonite X","Mewtwonite Y","Misty Seed","Muscle Band","Odd Incense","Pidgeotite","Pinsirite","Poison Memory","Power Anklet","Power Band","Power Belt","Power Bracer","Power Herb","Power Lens","Power Weight","Protective Pads","Psychic Memory","Psychic Seed","Quick Claw","Razor Claw","Razor Fang","Red Card","Red Orb","Ring Target","Rock Incense","Rock Memory","Rocky Helmet","Room Service","Rose Incense","Sablenite","Safety Goggles","Salamencite","Sceptilite","Scizorite","Scope Lens","Sea Incense","Sharpedonite","Shed Shell","Shell Bell","Shock Drive","Slowbronite","Smoke Ball","Smooth Rock","Snowball","Steel Memory","Steelixite","Sticky Barb","Swampertite","Terrain Extender","Throat Spray","Toxic Orb","Tyranitarite","Utility Umbrella","Venusaurite","Water Memory","Wave Incense","Weakness Policy","White Herb","Wide Lens","Wise Glasses","Zoom Lens"});
 
     static class verifyIvs extends InputVerifier {
         public boolean verify(JComponent jComponent) {
@@ -107,6 +109,13 @@ public class PokemonMaker extends JPanel {
         this.evsAndIvs.add(this.evs);
         this.evsAndIvs.add(this.ivs);
 
+        Box dynamax = Box.createHorizontalBox();
+        dynamaxLevel.setMaximumSize(new Dimension(dynamaxLevel.getMaximumSize().width,dynamaxLevel.getMinimumSize().height));
+        dynamax.add(new JLabel("Dynamax level(-1 is not dynamaxed)"));
+        dynamax.add(dynamaxLevel);
+
+        itemJComboBox.setMaximumSize(new Dimension(itemJComboBox.getMaximumSize().width,itemJComboBox.getMinimumSize().height));
+
         add(Box.createVerticalStrut(20));
         add(this.name);
         add(Box.createVerticalStrut(10));
@@ -117,6 +126,10 @@ public class PokemonMaker extends JPanel {
         add(this.moveJComboBox);
         add(Box.createVerticalStrut(10));
         add(this.evsAndIvs);
+        add(Box.createVerticalStrut(10));
+        add(dynamax);
+        add(Box.createVerticalStrut(10));
+        add(itemJComboBox);
         add(Box.createVerticalStrut(10));
     }
 
@@ -132,8 +145,11 @@ public class PokemonMaker extends JPanel {
             evs[j] = Integer.parseInt(this.evBoxes[j].getText());
         }
 
-        Pokemon pikachu = new Pokemon(base, evs, ivs, 50, nature);
+        int dynamaxLv = (Integer)dynamaxLevel.getValue();
+
+        Pokemon pikachu = new Pokemon(base, evs, ivs, 50, nature,dynamaxLv);
         pikachu.moves[0] = (Move) this.moveJComboBox.getSelectedItem();
+        pikachu.item = (String) itemJComboBox.getSelectedItem();
         return pikachu;
     }
 

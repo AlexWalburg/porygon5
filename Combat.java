@@ -7,6 +7,50 @@ import java.util.ArrayList;
 public class Combat {
     public static int[] attack(Pokemon attacker, Pokemon attacked, Move move, Context context) {
         double damage;
+        int oldpower = move.power;
+        //todo refactor into a hashmap, use the exisitng one and call it once at the start, have it also apply a multiplier at the end
+        //only necessary if this isn't performant
+        if(attacked.item.equals("Assault Vest")){
+            attacked.stats[Pokemon.Stats.SPD]*=3;
+            attacked.stats[Pokemon.Stats.SPD]/=2;
+        } else if(attacked.item.equals("Electric Seed") && context.terrain.equals("Electric Terrain")){
+            attacked.stats[Pokemon.Stats.DEF]*=3;
+            attacked.stats[Pokemon.Stats.DEF]/=2;
+        } else if(attacked.item.equals("Grassy Seed") && context.terrain.equals("Grassy Terrain")){
+            attacked.stats[Pokemon.Stats.DEF]*=3;
+            attacked.stats[Pokemon.Stats.DEF]/=2;
+        } else if(attacked.item.equals("Misty Seed") && context.terrain.equals("Misty Terrain")){
+            attacked.stats[Pokemon.Stats.DEF]*=3;
+            attacked.stats[Pokemon.Stats.DEF]/=2;
+        } else if(attacked.item.equals("Psychic Seed") && context.terrain.equals("Psychic Terrain")){
+            attacked.stats[Pokemon.Stats.DEF]*=3;
+            attacked.stats[Pokemon.Stats.DEF]/=2;
+        }
+        if(attacker.item.equals("Choice Band")){
+            attacker.stats[Pokemon.Stats.ATK]*=3;
+            attacker.stats[Pokemon.Stats.ATK]/=2;
+        } else if(attacker.item.equals("Choice Scarf")){
+            attacker.stats[Pokemon.Stats.SPA]*=3;
+            attacker.stats[Pokemon.Stats.SPA]/=2;
+        } else if(attacker.item.equals("Muscle Band")){
+            move.power*=11;
+            move.power/=10;
+        } else if((attacker.item.equals("Twisted Spoon") || attacker.item.equals("Odd Incense")) && move.type.equals("Psychic")){
+            move.power*=6;
+            move.power/=5;
+        } else if((attacker.item.equals("Hard Stone") || attacker.item.equals("Rock Incense")) && move.type.equals("Psychic")){
+            move.power*=6;
+            move.power/=5;
+        } else if((attacker.item.equals("Miracle Seed") || attacker.item.equals("Rose Incense")) && move.type.equals("Psychic")){
+            move.power*=6;
+            move.power/=5;
+        } else if((attacker.item.equals("Mystic Water") || attacker.item.equals("Sea Incense")) && move.type.equals("Psychic")){
+            move.power*=6;
+            move.power/=5;
+        } else if(attacker.item.equals("Wise Glasses") && move.category.equals("Special")){
+            move.power*=11;
+            move.power/=10;
+        }
         if (move.category.equals("Physical")) {
             damage = (2.0D * attacker.level / 5.0D + 2.0D) * move.power * attacker.stats[Pokemon.Stats.ATK] / attacked.stats[Pokemon.Stats.DEF];
         } else {
@@ -20,7 +64,16 @@ public class Combat {
         }
         damage *= context.generateMultiplier(attacker,move,attacked);
         damage *= TypeAdvantages.generateMultiplier(move, attacked.base);
+        if(attacker.item.equals("Expert Belt")) {
+            damage *= 1.2;
+        } else if(attacker.item.equals("Life Orb")){
+            damage*=5324.0/4096.9;
+        }
+        if(attacked.item.equals("Air Balloon") && move.type.equals("Ground")){
+            damage=0;
+        }
         int[] damageRange = {(int) (85.0D * damage / 100.0D), (int) damage};
+        move.power=oldpower;
         return damageRange;
     }
 

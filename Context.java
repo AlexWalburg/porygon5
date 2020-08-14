@@ -8,7 +8,6 @@ public class Context {
         double multiplier = 1;
         if(doubles) multiplier*=0.75;
 
-        //todo when we add items, the utility umbrella should come here
         //handles STAB and power doubling
         if(!"No Terrain".equals(terrain) && move.name.equals("Terrain Pulse"))
             multiplier*=2.0*2.0*1.3;
@@ -24,13 +23,13 @@ public class Context {
         } else if("Grassy Terrain".equals(terrain) && move.type.equals("Grassy")){
             multiplier*=1.3; //grassy glide's priority increase doesn't matter here
         }
-        if("Sunshine".equals(weather)){
+        if("Sunshine".equals(weather) && !attacker.item.equals("Utility Umbrella")){
             if(move.type.equals("Fire")){
                 multiplier*=1.5;
             } else if(move.type.equals("Water")){
                 multiplier*=2.0/3.0;
             }
-        } else if("Harsh Sunshine".equals(weather)){
+        } else if("Harsh Sunshine".equals(weather) && !attacker.item.equals("Utility Umbrella")){
             if(move.type.equals("Fire")){
                 multiplier*=1.5;
             } else if(move.type.equals("Water")){
