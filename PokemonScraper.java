@@ -167,6 +167,13 @@ public class PokemonScraper {
             System.out.print("\"" + e1.text() + "\"" + ",");
         }
     }
+    public static void scrapeAbilities() throws IOException{
+        Document doc = Jsoup.connect("https://bulbapedia.bulbagarden.net/wiki/Ability").get();
+        Element e = doc.getElementsByAttributeValue("style","background:#FFF; border:1px solid #ddf; border-collapse:collapse").first();
+        for(Element e1 : e.getElementsByTag("tr")){
+            System.out.print("\"" + e1.child(1).text() + "\"" + ",");
+        }
+    }
 
     public static ArrayList<Move> loadMoves() throws IOException, ClassNotFoundException {
         ClassLoader classLoader = ClassLoader.getSystemClassLoader();
@@ -255,7 +262,7 @@ public class PokemonScraper {
 
     public static void main(String[] args) {
         try {
-            scrapeItems();
+            scrapeAbilities();
         } catch (Exception e) {
             e.printStackTrace();
         }

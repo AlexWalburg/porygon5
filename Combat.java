@@ -8,21 +8,24 @@ public class Combat {
     public static int[] attack(Pokemon attacker, Pokemon attacked, Move move, Context context) {
         double damage;
         int oldpower = move.power;
+
+        double abilityMultiplier = AbilityEffects.genMultiplier(attacker,move,attacked,context);
         //todo refactor into a hashmap, use the exisitng one and call it once at the start, have it also apply a multiplier at the end
+        //see a good example for the ability effects
         //only necessary if this isn't performant
-        if(attacked.item.equals("Assault Vest")){
+        if("Assault Vest".equals(attacked.item)){
             attacked.stats[Pokemon.Stats.SPD]*=3;
             attacked.stats[Pokemon.Stats.SPD]/=2;
-        } else if(attacked.item.equals("Electric Seed") && context.terrain.equals("Electric Terrain")){
+        } else if("Electric Seed".equals(attacked.item) && context.terrain.equals("Electric Terrain")){
             attacked.stats[Pokemon.Stats.DEF]*=3;
             attacked.stats[Pokemon.Stats.DEF]/=2;
-        } else if(attacked.item.equals("Grassy Seed") && context.terrain.equals("Grassy Terrain")){
+        } else if("Grassy Seed".equals(attacked.item) && context.terrain.equals("Grassy Terrain")){
             attacked.stats[Pokemon.Stats.DEF]*=3;
             attacked.stats[Pokemon.Stats.DEF]/=2;
-        } else if(attacked.item.equals("Misty Seed") && context.terrain.equals("Misty Terrain")){
+        } else if("Misty Seed".equals(attacked.item) && context.terrain.equals("Misty Terrain")){
             attacked.stats[Pokemon.Stats.DEF]*=3;
             attacked.stats[Pokemon.Stats.DEF]/=2;
-        } else if(attacked.item.equals("Psychic Seed") && context.terrain.equals("Psychic Terrain")){
+        } else if("Psychic Seed".equals(attacked.item) && context.terrain.equals("Psychic Terrain")){
             attacked.stats[Pokemon.Stats.DEF]*=3;
             attacked.stats[Pokemon.Stats.DEF]/=2;
         }
@@ -69,9 +72,10 @@ public class Combat {
         } else if(attacker.item.equals("Life Orb")){
             damage*=5324.0/4096.9;
         }
-        if(attacked.item.equals("Air Balloon") && move.type.equals("Ground")){
+        if("Air Balloon".equals(attacked.item) && move.type.equals("Ground")){
             damage=0;
         }
+        damage*=abilityMultiplier;
         int[] damageRange = {(int) (85.0D * damage / 100.0D), (int) damage};
         move.power=oldpower;
         return damageRange;

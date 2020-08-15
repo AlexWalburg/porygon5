@@ -23,6 +23,22 @@ public class Context {
         } else if("Grassy Terrain".equals(terrain) && move.type.equals("Grassy")){
             multiplier*=1.3; //grassy glide's priority increase doesn't matter here
         }
+        multiplier*=generateWeatherMultiplier(attacker,move,attacked);
+        if(lightScreen && move.category.equals("Special")) multiplier/=2.0;
+        if(reflect && move.category.equals("Physical")) multiplier/=2.0;
+        if(auroraVeil){
+            if(doubles) multiplier*=0.33;
+            else multiplier*=0.5;
+        }
+        if(crit) multiplier*=1.5;
+        multiplier*=numHits;
+
+
+        return multiplier;
+    }
+
+    public double generateWeatherMultiplier(Pokemon attacker, Move move, Pokemon attacked){
+        double multiplier=1.0;
         if("Sunshine".equals(weather) && !attacker.item.equals("Utility Umbrella")){
             if(move.type.equals("Fire")){
                 multiplier*=1.5;
@@ -53,16 +69,6 @@ public class Context {
                 multiplier/=2.0;
             }
         }
-        if(lightScreen && move.category.equals("Special")) multiplier/=2.0;
-        if(reflect && move.category.equals("Physical")) multiplier/=2.0;
-        if(auroraVeil){
-            if(doubles) multiplier*=0.33;
-            else multiplier*=0.5;
-        }
-        if(crit) multiplier*=1.5;
-        multiplier*=numHits;
-
-
         return multiplier;
     }
 }
