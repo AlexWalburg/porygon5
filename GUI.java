@@ -28,7 +28,9 @@ public class GUI
             auroraVeil = new JToggleButton("Aurora Veil?"),
             crit = new JToggleButton("Crit?");
     JSpinner numHits = new JSpinner(new SpinnerNumberModel(1,1,10,1));
-
+    public JPanel statChanges;
+    public JSpinner[] statChangesBoxes = new JSpinner[5];
+    JSpinner dynamaxLevel = new JSpinner(new SpinnerNumberModel(-1,-1,10,1));
 
     public GUI() throws IOException, ClassNotFoundException {
         setLayout(new GridLayout(1, 4));
@@ -50,6 +52,25 @@ public class GUI
         Box numHitsHolder = Box.createHorizontalBox(); numHitsHolder.add(new Label("Number of hits")); numHitsHolder.add(numHits);
         numHitsHolder.setMaximumSize(new Dimension(numHitsHolder.getMaximumSize().width,numHitsHolder.getMinimumSize().height));
 
+        for(int i = 0; i<5; i++)
+            statChangesBoxes[i] = new JSpinner(new SpinnerNumberModel(0,-6,6,1));
+        statChanges = new JPanel();
+        statChanges.setLayout(new GridLayout(2,5));
+        statChanges.add(new JLabel("Atk"));
+        statChanges.add(new JLabel("Def"));
+        statChanges.add(new JLabel("Spa"));
+        statChanges.add(new JLabel("Spd"));
+        statChanges.add(new JLabel("Spe"));
+        for(int i = 0; i < statChangesBoxes.length; i++){
+            statChanges.add(statChangesBoxes[i]);
+            statChanges.setMaximumSize(new Dimension(statChanges.getMaximumSize().width,statChanges.getMinimumSize().height));
+        }
+
+        Box dynamax = Box.createHorizontalBox();
+        dynamaxLevel.setMaximumSize(new Dimension(dynamaxLevel.getMaximumSize().width,dynamaxLevel.getMinimumSize().height));
+        dynamax.add(new JLabel("Dynamax level(-1 is not dynamaxed)"));
+        dynamax.add(dynamaxLevel);
+
         contextMaker.setLayout(new BoxLayout(contextMaker,BoxLayout.Y_AXIS));
         contextMaker.add(Box.createVerticalStrut(20));
         contextMaker.add(title);
@@ -63,7 +84,9 @@ public class GUI
         contextMaker.add(crit);
         contextMaker.add(makeResults);
         contextMaker.add(makeReverseResults);
-
+        contextMaker.add(new JLabel("Stat Changes"));
+        contextMaker.add(statChanges);
+        contextMaker.add(dynamax);
 
         add(yourPokemon);
         add(contextMaker);
@@ -87,9 +110,14 @@ public class GUI
             ArrayList<BasePokemon> attackeds = theirPokemons.getChosenPokemon();
             Pokemon attacker = yourPokemon.makePokemon();
             Move move = attacker.moves[0];
+            int[] statStages = new int[5];
+            for(int i = 0; i < statStages.length; i++){
+                statStages[i]=(Integer) statChangesBoxes[i].getValue();
+            }
+            int dynamaxlvl = (Integer) dynamaxLevel.getValue();
             for (BasePokemon attackedBase : attackeds) {
                 try {
-                    for (Pokemon attacked : PokemonScraper.scrapePikalytics(attackedBase)) {
+                    for (Pokemon attacked : PokemonScraper.scrapePikalytics(attackedBase,dynamaxlvl,statStages)) {
                         results.addResultsViewer(new ResultsViewer(attacker, attacked, move, context));
                     }
                 } catch (IOException e) {
@@ -102,11 +130,16 @@ public class GUI
             loadStuffIntoContext();
             ArrayList<BasePokemon> attackers = theirPokemons.getChosenPokemon();
             Pokemon attacked = yourPokemon.makePokemon();
+            int[] statStages = new int[5];
+            for(int i = 0; i < statStages.length; i++){
+                statStages[i]=(Integer) statChangesBoxes[i].getValue();
+            }
+            int dynamaxlvl = (Integer) dynamaxLevel.getValue();
 
             for (BasePokemon attackerBase : attackers) {
                 try {
                     moves = PokemonScraper.scrapePossibleMoves(attackerBase);
-                    for (Pokemon attacker : PokemonScraper.scrapePikalytics(attackerBase)) {
+                    for (Pokemon attacker : PokemonScraper.scrapePikalytics(attackerBase,dynamaxlvl,statStages)) {
                         Move move = Combat.getBestMove(attacker,attacked,moves,context);
                         results.addResultsViewer(new ResultsViewer(attacker, attacked, move, context,true));
                     }

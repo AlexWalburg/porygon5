@@ -44,9 +44,9 @@ public class ResultsViewer extends JPanel implements ActionListener {
             fullText.append(damageRange[1] * (i + 1));
             fullText.append(", ");
             fullText.append('(');
-            fullText.append(df.format(damageRange[0] / hp * (i + 1)));
+            fullText.append(df.format((double) damageRange[0] * (i + 1) / hp));
             fullText.append('-');
-            fullText.append(df.format(damageRange[1] / hp * (i + 1)));
+            fullText.append(df.format((double) damageRange[1] * (i + 1) / hp));
             fullText.append(") ");
             fullText.append(df.format(percents[i]));
             fullText.append('\n');
@@ -103,9 +103,9 @@ public class ResultsViewer extends JPanel implements ActionListener {
             fullText.append(damageRange[1] * (i + 1));
             fullText.append(", ");
             fullText.append('(');
-            fullText.append(df.format(damageRange[0] / hp * (i + 1)));
+            fullText.append(df.format((double)damageRange[0]  * (i + 1) / hp));
             fullText.append('-');
-            fullText.append(df.format(damageRange[1] / hp * (i + 1)));
+            fullText.append(df.format((double)damageRange[1] * (i + 1) / hp ));
             fullText.append(") ");
             fullText.append(df.format(percents[i]));
             fullText.append('\n');

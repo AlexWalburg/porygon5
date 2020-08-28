@@ -21,13 +21,15 @@ public class Pokemon {
 
     public BasePokemon base;
     public int[] stats = new int[]{0, 0, 0, 0, 0, 0};
+    public int[] statsBeforeStages = new int[]{0, 0, 0, 0, 0, 0};
+    private int[] stages = new int[]{0, 0, 0, 0, 0, 0};
     public int[] evs;
     public int[] ivs;
     public int[] natureEffects;
     public String nature;
     public int level;
     public double popularity;
-    public String item, ability; //I would use an int and an enum, but it's fucking java and terrible. this also saves time on the encode
+    public String item, ability; //I would use an int and an enum, but it's fucking java and the enums are terrible. this also saves time on the encode
     public Move[] moves = new Move[4];
     public static HashMap<String, int[]> natures;
     static {
@@ -71,27 +73,65 @@ public class Pokemon {
         this.level = level;
         this.ivs = ivs;
         this.evs = evs;
-        this.stats[Stats.HP] = (ivs[Stats.HP] + 2 * species.stats[Stats.HP] + evs[Stats.HP] / 4) * level / 100 + 10 + level;
-        for (int i = 1; i < this.stats.length; i++)
-            this.stats[i] = ((ivs[i] + 2 * species.stats[i] + evs[i] / 4) * level / 100 + 5) * this.natureEffects[i] / 10;
+        this.statsBeforeStages[Stats.HP] = (ivs[Stats.HP] + 2 * species.stats[Stats.HP] + evs[Stats.HP] / 4) * level / 100 + 10 + level;
+        for (int i = 1; i < this.statsBeforeStages.length; i++)
+            this.statsBeforeStages[i] = ((ivs[i] + 2 * species.stats[i] + evs[i] / 4) * level / 100 + 5) * this.natureEffects[i] / 10;
+
+        updateStats();
     }
-    public Pokemon(BasePokemon species, int[] evs, int[] ivs, int level, String nature, int dynamaxLevel) {
+    public Pokemon(BasePokemon species, int[] evs, int[] ivs, int level, String nature, int dynamaxLevel, int[] stages) {
         this.nature = nature;
         this.natureEffects = natures.get(nature);
 
+        for(int i = 0; i < stages.length; i++)
+            this.stages[i+1] = stages[i];
 
         this.base = species;
         this.level = level;
         this.ivs = ivs;
         this.evs = evs;
-        this.stats[Stats.HP] = (ivs[Stats.HP] + 2 * species.stats[Stats.HP] + evs[Stats.HP] / 4) * level / 100 + 10 + level;
-        for (int i = 1; i < this.stats.length; i++)
-            this.stats[i] = ((ivs[i] + 2 * species.stats[i] + evs[i] / 4) * level / 100 + 5) * this.natureEffects[i] / 10;
+        this.statsBeforeStages[Stats.HP] = (ivs[Stats.HP] + 2 * species.stats[Stats.HP] + evs[Stats.HP] / 4) * level / 100 + 10 + level;
+        for (int i = 1; i < this.statsBeforeStages.length; i++)
+            this.statsBeforeStages[i] = ((ivs[i] + 2 * species.stats[i] + evs[i] / 4) * level / 100 + 5) * this.natureEffects[i] / 10;
 
         //dynamax modification
         if(dynamaxLevel >= 0){
-            int oldHp = this.stats[Stats.HP];
-            this.stats[Stats.HP] = (int)(oldHp*1.5 + oldHp*0.05*dynamaxLevel);
+            int oldHp = this.statsBeforeStages[Stats.HP];
+            this.statsBeforeStages[Stats.HP] = (int)(oldHp*1.5 + oldHp*0.05*dynamaxLevel);
+        }
+
+        updateStats();
+    }
+
+    public void setStatChange(int index, int stage){
+        stages[index]=stage;
+        if(stage>0){
+            stats[index]=statsBeforeStages[index]*(2+stage)/2;
+        } else {
+            stats[index]=statsBeforeStages[index]*2/(2+stage);
+        }
+    }
+    public void addStatChange(int index, int stage){
+        stages[index]+=stage;
+        if(stage>0){
+            stats[index]=statsBeforeStages[index]*(2+stage)/2;
+        } else {
+            stats[index]=statsBeforeStages[index]*2/(2+stage);
+        }
+    }
+
+    public int getStatChange(int index){
+        return stages[index];
+    }
+
+    public void updateStats(){
+        for(int i = 0; i < stats.length; i++){
+            int stage = stages[i];
+            if(stage>0){
+                stats[i]=statsBeforeStages[i]*(2+stage)/2;
+            } else {
+                stats[i]=statsBeforeStages[i]*2/(2+stage);
+            }
         }
     }
 

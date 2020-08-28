@@ -160,6 +160,25 @@ public class PokemonScraper {
         return toReturn;
     }
 
+    public static ArrayList<Pokemon> scrapePikalytics(BasePokemon pokemon,int dynamax, int[] statStages) throws IOException {
+        Document doc = Jsoup.connect("https://www.pikalytics.com/pokedex/ss/" + pokemon.name).get();
+        Element table = doc.getElementsByClass("pokemon-stat-container").last();
+        Elements spreads = table.getElementsByClass("pokedex-move-entry-new");
+        ArrayList<Pokemon> toReturn = new ArrayList<>();
+        for (Element spread : spreads) {
+            Elements attributes = spread.children();
+            String nature = ((Element) attributes.get(0)).text();
+            int[] stats = new int[6];
+            for (int i = 0; i < stats.length; i++) {
+                stats[i] = Integer.parseInt(((Element) attributes.get(i + 1)).text().replace("/", ""));
+            }
+            double popularity = Double.parseDouble(((Element) attributes.get(7)).text().replace("%", "")); //todo implement popularity
+            int[] ivs = {31, 31, 31, 31, 31, 31};
+            toReturn.add(new Pokemon(pokemon, stats, ivs, 50, nature, dynamax, statStages));
+        }
+        return toReturn;
+    }
+
     public static void scrapeItems() throws IOException{
         Document doc = Jsoup.connect("https://bulbapedia.bulbagarden.net/wiki/Category:In-battle_effect_items").get();
         Element e = doc.getElementsByClass("mw-category").get(1);

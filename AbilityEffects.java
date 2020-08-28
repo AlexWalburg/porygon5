@@ -25,37 +25,37 @@ public class AbilityEffects {
         attackerAbilities.put("Blaze",(attacker,move,attacked,context) -> {move.power*=1.5; return 1;});
         attackerAbilities.put("Dark Aura", (attacker,move,attacked,context) -> move.type.equals("Dark") ? 1.33 : 1);
         attackerAbilities.put("Defeatist", (attacker,move,attacked,context) -> {attacker.stats[Pokemon.Stats.ATK]/=2;attacker.stats[Pokemon.Stats.SPA]/=2;return 1;});
-        attackerAbilities.put("Defiant", (attacker, move, attacked, context) -> {attacker.stats[Pokemon.Stats.ATK]*=1.5;return 1;});
+        attackerAbilities.put("Defiant", (attacker, move, attacked, context) -> {attacker.addStatChange(Pokemon.Stats.ATK,2);return 1;});
         attackerAbilities.put("Delta Stream", (attacker, move, attacked, context) -> TypeAdvantages.isSuperEffective(attacked.base,move) ? 0.5 : 1.0); //cancels out the flying advantage
         attackerAbilities.put("Download", (attacker, move, attacked, context) -> {
             if(attacked.stats[Pokemon.Stats.DEF] > attacked.stats[Pokemon.Stats.SPD]){
-                attacker.stats[Pokemon.Stats.SPA]*=1.50; //todo incorporate the state changes here
+                attacker.addStatChange(Pokemon.Stats.SPA,1);
             } else {
-                attacker.stats[Pokemon.Stats.ATK]*=1.50;
+                attacker.addStatChange(Pokemon.Stats.ATK,1);
             }
             return 1;
         });
         attackerAbilities.put("Fairy Aura", (attacker,move,attacked,context) -> move.type.equals("Fairy") ? 1.33 : 1);
         attackerAbilities.put("Flare Boost", (attacker,move,attacked,context) -> {if(move.category.equals("Special")) move.power*=1.5; return 1;});
         attackerAbilities.put("Flash Fire", (attacker,move,attacked,context) -> {if(move.type.equals("Fire")) move.power*=1.5; return 1;});
-        attackerAbilities.put("Flower Gift", (attacker, move, attacked, context) -> {if(context.weather.equals("Harsh Sunlight")) attacker.stats[Pokemon.Stats.ATK]*=1.5; return 1;});
+        attackerAbilities.put("Flower Gift", (attacker, move, attacked, context) -> {if(context.weather.equals("Harsh Sunlight")) attacker.addStatChange(Pokemon.Stats.ATK,1); return 1;});
         //todo Fluffy
         attackerAbilities.put("Galvanize", (attacker,move,attacked,context) -> move.type.equals("Normal") ? 1.5 : 1);
-        attackerAbilities.put("Gorilla Tactics", (attacker, move, attacked, context) -> {attacker.stats[Pokemon.Stats.ATK]*=1.5; return 1.0;});
-        attackerAbilities.put("Guts", (attacker, move, attacked, context) -> {attacker.stats[Pokemon.Stats.ATK]*=1.5; return 1;});
+        attackerAbilities.put("Gorilla Tactics", (attacker, move, attacked, context) -> {attacker.addStatChange(Pokemon.Stats.ATK,1); return 1.0;});
+        attackerAbilities.put("Guts", (attacker, move, attacked, context) -> {attacker.addStatChange(Pokemon.Stats.ATK,1); return 1;});
         attackerAbilities.put("Huge Power", (attacker,move,attacked,context) -> 2.0);
         attackerAbilities.put("Hustle", (attacker,move,attacked,context) -> 1.5);
-        attackerAbilities.put("Intrepid Sword", (attacker, move, attacked, context) -> {attacker.stats[Pokemon.Stats.ATK]*=1.5;return 1;});
+        attackerAbilities.put("Intrepid Sword", (attacker, move, attacked, context) -> {attacker.addStatChange(Pokemon.Stats.ATK,1);return 1;});
         attackerAbilities.put("Iron Fist", (attacker, move, attacked, context) -> {if(
                 Arrays.asList(new String[]{"Bullet Punch", "Comet Punch", "Dizzy Punch", "Double Iron Bash", "Drain Punch", "Dynamic Punch", "Fire Punch", "Focus Punch", "Hammer Arm", "Ice Hammer", "Ice Punch", "Mach Punch", "Mega Punch", "Meteor Mash", "Plasma Fists", "Power-Up Punch", "Shadow Punch", "Sky Uppercut", "Thunder Punch"}).contains(move.name)
         ) move.power*=1.2; return 1;});
-        attackerAbilities.put("Justified", (attacker, move, attacked, context) -> {attacker.stats[Pokemon.Stats.ATK]*=1.5; return 1;});
+        attackerAbilities.put("Justified", (attacker, move, attacked, context) -> {attacker.addStatChange(Pokemon.Stats.ATK,1); return 1;});
         attackerAbilities.put("Libero", (attacker, move, attacked, context) -> move.type.equals(attacker.types[0]) || move.type.equals(attacker.types[1]) ? 1 : 1.5);
-        attackerAbilities.put("Lightning Rod", (attacker, move, attacked, context) -> {attacker.stats[Pokemon.Stats.SPA]*=1.5; return 1;});
+        attackerAbilities.put("Lightning Rod", (attacker, move, attacked, context) -> {attacker.addStatChange(Pokemon.Stats.SPA,1); return 1;});
         attackerAbilities.put("Mega Launcher", (attacker, move, attacked, context) -> {if(Arrays.asList(new String[]{"Aura Sphere","Dark Pulse", "Dragon Pulse", "Origin Pulse", "Terrain Pulse", "Water Pulse"}).contains(move.name)) move.power*=1.5; return 1;});
         attackerAbilities.put("Merciless", (attacker, move, attacked, context) -> {context.crit=true; return 1;});
-        attackerAbilities.put("Minus", (attacker, move, attacked, context) -> {attacked.stats[Pokemon.Stats.SPA]*=1.5; return 1;});
-        attackerAbilities.put("Plus", (attacker, move, attacked, context) -> {attacked.stats[Pokemon.Stats.SPA]*=1.5; return 1;});
+        attackerAbilities.put("Minus", (attacker, move, attacked, context) -> {attacker.addStatChange(Pokemon.Stats.SPA,1); return 1;});
+        attackerAbilities.put("Plus", (attacker, move, attacked, context) -> {attacker.addStatChange(Pokemon.Stats.SPA,1); return 1;});
         attackerAbilities.put("Normalize", ((attacker, move, attacked, context) -> move.type.equals("Normal") ? 1 : 1.5)); //automatically does stab, HORRIBLE HACK
         attackerAbilities.put("Overgrow",(attacker,move,attacked,context) -> {move.power*=1.5; return 1;});
         attackerAbilities.put("Parental Bond", (((attacker, move, attacked, context) -> 1.5)));
@@ -74,16 +74,16 @@ public class AbilityEffects {
         attackedAbilities.put("Cloud Nine", ((attacker,move,attacked, context) -> 1/context.generateWeatherMultiplier(attacker,move,attacked)));
         attackedAbilities.put("Damp", (attacker,move,attacked,context) -> Arrays.asList(new String[]{"Self-Destruct", "Explosion", "Mind Blown", "Misty Explosion"}).contains(move.name) ? 0 : 1);
         attackedAbilities.put("Dark Aura", (attacker,move,attacked,context) -> move.type.equals("Dark") ? 1.33 : 1);
-        attackedAbilities.put("Dauntless Shield", (attacker,move,attacked,context) -> {attacked.stats[Pokemon.Stats.DEF]*=1.5; return 1;}); //todo, if we add stat changes just use those
+        attackedAbilities.put("Dauntless Shield", (attacker,move,attacked,context) -> {attacked.addStatChange(Pokemon.Stats.DEF,1); return 1;});
         attackedAbilities.put("Delta Stream", (attacker, move, attacked, context) -> TypeAdvantages.isSuperEffective(attacked.base,move) ? 0.5 : 1.0); //cancels out the flying advantage
         attackedAbilities.put("Dry Skin", (attacker,move,attacked,context) -> move.type.equals("Fire") ? 1.25 : 1);
         attackedAbilities.put("Fairy Aura", (attacker,move,attacked,context) -> move.type.equals("Fairy") ? 1.33 : 1);
         attackedAbilities.put("Filter", (attacker,move,attacked,context) -> TypeAdvantages.isSuperEffective(attacked.base,move) ? 0.75 : 1);
-        attackedAbilities.put("Flower Gift", (attacker, move, attacked, context) -> {if(context.weather.equals("Harsh Sunlight")) attacked.stats[Pokemon.Stats.SPD]*=1.5; return 1;});
-        attackedAbilities.put("Grass Pelt", (attacker, move, attacked, context) -> {if(context.terrain.equals("Grassy Terrain")) attacked.stats[Pokemon.Stats.DEF]*=1.5; return 1;});
+        attackedAbilities.put("Flower Gift", (attacker, move, attacked, context) -> {if(context.weather.equals("Harsh Sunlight")) attacked.addStatChange(Pokemon.Stats.SPD,1); return 1;});
+        attackedAbilities.put("Grass Pelt", (attacker, move, attacked, context) -> {if(context.terrain.equals("Grassy Terrain")) attacked.addStatChange(Pokemon.Stats.DEF,1); return 1;});
         attackedAbilities.put("Heatproof", (attacker,move,attacked,context) -> move.type.equals("Fire") ? 0.5 : 1);
         attackedAbilities.put("Ice Scales", (attacker, move, attacked, context) -> move.category.equals("Special") ? 0.5 : 1);
-        attackedAbilities.put("Intimidate",(attacker, move, attacked, context) -> {attacker.stats[Pokemon.Stats.ATK]*=0.75; return 1;}); //todo STAT STAGES
+        attackedAbilities.put("Intimidate",(attacker, move, attacked, context) -> {attacker.addStatChange(Pokemon.Stats.ATK,-1); return 1;});
         attackedAbilities.put("Levitate", (attacker, move, attacked, context) -> move.type.equals("Ground") ? 0 : 1);
         attackedAbilities.put("Prism Armor", (attacker,move,attacked,context) -> TypeAdvantages.isSuperEffective(attacked.base,move) ? 0.75 : 1);
         attackedAbilities.put("Thick Fat", (((attacker, move, attacked, context) -> move.type.equals("Fire") || move.type.equals("Ice") ? 0.5 : 1)));
