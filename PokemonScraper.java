@@ -161,7 +161,7 @@ public class PokemonScraper {
     }
 
     public static ArrayList<Pokemon> scrapePikalytics(BasePokemon pokemon,int dynamax, int[] statStages) throws IOException {
-        Document doc = Jsoup.connect("https://www.pikalytics.com/pokedex/ss/" + pokemon.name).get();
+        Document doc = Jsoup.connect("https://www.pikalytics.com/pokedex/homebsd/" + pokemon.name).get();
         Element table = doc.getElementsByClass("pokemon-stat-container").last();
         Elements spreads = table.getElementsByClass("pokedex-move-entry-new");
         ArrayList<Pokemon> toReturn = new ArrayList<>();
